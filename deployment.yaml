@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitcoin-core
+  namespace: bitcoin
+  labels:
+    app: bitcoin-core
+spec:
+  selector:
+    matchLabels:
+      app: bitcoin-core
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bitcoin-core
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        kubernetes.io/hostname: k8s-0
+      volumes:
+        - name: bitcoin-data
+          hostPath: 
+            path: "/vmdata/bitcoin"
+      containers:
+        - name: bitcoin-core
+          image: kylemanna/bitcoind
+          ports:
+            - name: rpc
+              protocol: TCP
+              containerPort: 8332
+            - name: p2p
+              protocol: TCP
+              containerPort: 8333
+          volumeMounts:
+            - name: bitcoin-data
+              mountPath: "/bitcoin/.bitcoin"
