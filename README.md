@@ -12,3 +12,4 @@ To do:
 - Add a configMap for the `bitcoind.conf` file.
 - Choose a version for the container.
 - Parameterise all the things.
+- Think of some better load balancing than the nodePort.
